@@ -1,5 +1,6 @@
 package com.example.ripay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -26,11 +27,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private int loginView;
 
-    //TODO Add new activity for post user login.
-
     public void onLoginButtonPress(View view) {
-        Log.d("debug", "login button pressed");
-
         EditText emailText = findViewById(R.id.edtLoginEmail);
         EditText passwordText = findViewById(R.id.edtLoginPassword);
 
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity
 
         if (email.isEmpty() || password.isEmpty()) {
             Snackbar.make(findViewById(R.id.loginScreen), R.string.login_details_not_entered,
-                    Snackbar.LENGTH_SHORT).show();
+                    Snackbar.LENGTH_LONG).show();
             return;
         }
 
@@ -50,29 +47,37 @@ public class MainActivity extends AppCompatActivity
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) { // Correct user login
+                            if (task.isSuccessful()) {
                                 Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
-                                        Snackbar.LENGTH_SHORT).show();
-                                FirebaseUser currentUser = mAuth.getCurrentUser();
-                                // hjashjahah
-                            } else { // Incorrect user login
-                                Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_fail,
-                                        Snackbar.LENGTH_SHORT).show();
-                                // hjahahaha
+                                        Snackbar.LENGTH_LONG).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                // TODO ADD SIGNIN ACTIVITY
+                            } else {
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthInvalidUserException e) {
+                                    // User does not exist
+                                    Snackbar.make(findViewById(R.id.loginScreen), R.string.user_not_found_error,
+                                            Snackbar.LENGTH_LONG).show();
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    // Incorrect credentials
+                                    Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_password_fail,
+                                            Snackbar.LENGTH_LONG).show();
+                                } catch (Exception e) {
+                                    Log.d("exception", e.getMessage());
+                                }
                             }
                         }
                     });
 
-        } else { // User is signed in
-            Snackbar.make(findViewById(R.id.loginScreen), R.string.user_not_found_error,
-                    Snackbar.LENGTH_SHORT).show();
-            //jlhdjfdjh
+        } else { // User is signed in (control shouldn't reach this part of code)
+            Log.d("exception", "Unknown error");
         }
     }
 
     public void onRegisterButtonPress(View view) {
-        Log.d("debug", "register button pressed");
-        setContentView(R.layout.app_bar_main);
+        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        startActivity(registerIntent);
     }
 
     @Override
@@ -83,26 +88,19 @@ public class MainActivity extends AppCompatActivity
         setContentView(loginView);
 
         mAuth = FirebaseAuth.getInstance();
-        //FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        //        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.addDrawerListener(toggle);
-        //toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (currentUser != null) { // If user has previously signed in.
+            Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
+                    Snackbar.LENGTH_LONG).show();
+            Log.d("debug", "User name: " + currentUser.getEmail());
+            mAuth.signOut(); // TODO REMOVE IN FINAL BUILD
+        }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     @Override
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        /*int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -149,6 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        return true;*/
         return true;
     }
 }
