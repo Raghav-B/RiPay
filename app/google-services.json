@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "664355466803",
+    "firebase_url": "https://ripay-milobois.firebaseio.com",
+    "project_id": "ripay-milobois",
+    "storage_bucket": "ripay-milobois.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664355466803:android:414f0fdb25503b74fcbd46",
+        "android_client_info": {
+          "package_name": "com.example.ripay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664355466803-17g9e2ek1i2ka5k0m9618v57iesh77nj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ripay",
+            "certificate_hash": "72b24f27ccffd7e831fc06d5364ac6a697d900de"
+          }
+        },
+        {
+          "client_id": "664355466803-btifaefobor98gisql3rr6oe4ap5t5f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlaJ1N6I8fHUK4aBmuyLzQscydBm4bxLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664355466803-btifaefobor98gisql3rr6oe4ap5t5f7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
