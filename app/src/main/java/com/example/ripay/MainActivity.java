@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*public void onLoginButtonPress(View view) {
+    public void onLoginButtonPress(View view) {
         EditText emailText = findViewById(R.id.edtLoginEmail);
         EditText passwordText = findViewById(R.id.edtLoginPassword);
 
@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity
         } else { // User is signed in (control shouldn't reach this part of code)
             Log.d("exception", "Unknown error");
         }
-    }*/
+    }
 
-    public void onLoginButtonPress(View view) {
+    /*public void onLoginButtonPress(View view) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-    }
+    }*/
 
     public void completeLogin(FirebaseUser currentUser) {
         Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);

@@ -13,10 +13,11 @@
     <string name="user_not_found_error">User not found, please register a new account!</string>
 
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="registration_missing_fields">Please fill out all the fields before proceeding</string>
     <string name="registration_password_diff">Passwords do not match!</string>
     <string name="registration_weak_password">Please enter a password longer than 6 characters</string>
     <string name="registration_invalid_email">Please enter a valid email</string>
-    <string name="registration_email_exists">This account already exists, please login</string>
+    <string name="registration_email_exists">This account already exists, please login instead</string>
     <string name="registration_successful">Your account has been successfully created!</string>
 
     <string name="title_activity_primary">PrimaryActivity</string>
