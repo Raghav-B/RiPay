@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.daimajia.numberprogressbar:library:1.4@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/98161c387740d2555c51941eb568930e/jetified-library-1.4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/98161c387740d2555c51941eb568930e/jetified-library-1.4/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ee4a40b0bc2e547f8a2026c31a6988f7/jetified-library-1.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ee4a40b0bc2e547f8a2026c31a6988f7/jetified-library-1.4/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.daimajia.numberprogressbar/library/1.4/ff3c1141ad7366f9e1248284a19661abacbef84c/library-1.4-javadoc.jar!/" />

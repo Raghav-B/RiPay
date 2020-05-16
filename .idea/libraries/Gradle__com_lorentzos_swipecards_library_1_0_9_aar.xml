@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.lorentzos.swipecards:library:1.0.9@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/56c2afa49c09b75448ff823770bef1fe/jetified-library-1.0.9/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/56c2afa49c09b75448ff823770bef1fe/jetified-library-1.0.9/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/047739bd7563c6b868831f79a39e5cc0/jetified-library-1.0.9/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/047739bd7563c6b868831f79a39e5cc0/jetified-library-1.0.9/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

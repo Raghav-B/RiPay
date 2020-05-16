@@ -1,58 +1,57 @@
 package com.example.ripay;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.graphics.ImageFormat;
-import android.graphics.Paint;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.CaptureResult;
-import android.hardware.camera2.TotalCaptureResult;
-import android.hardware.camera2.params.OutputConfiguration;
-import android.hardware.camera2.params.SessionConfiguration;
-import android.hardware.camera2.params.StreamConfigurationMap;
-import android.media.Image;
-import android.media.ImageReader;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
+import android.util.Base64;
 import android.util.Log;
-import android.util.Size;
-import android.view.Surface;
-import android.view.SurfaceView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.frame.Frame;
+import com.otaliastudios.cameraview.frame.FrameProcessor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class NRICActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Context curContext;
+    private CameraView camera;
+    private TextView scanStatus;
+    private Button finishRegistrationButton;
 
-    private String cameraId;
-    private CameraDevice cameraDevice;
-    private CaptureRequest.Builder captureRequestBuilder;
-    private CameraCaptureSession cameraCaptureSessions;
-    private static final int REQUEST_CAMERA_PERMISSION = 200;
-
-    private SurfaceView cameraView;
-    private ImageReader imageReader;
-    private Handler mBackgroundHandler;
-    private HandlerThread mBackgroundThread;
+    private String firstNameString;
+    private String lastNameString;
+    private String newEmailString;
+    private String newPasswordConfirmString;
+    private String nricString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +63,95 @@ public class NRICActivity extends AppCompatActivity {
         mAuth.signOut();
 
         Intent prevRegistrationStep = getIntent();
-        String firstNameString = prevRegistrationStep.getStringExtra("firstName");
-        String lastNameString = prevRegistrationStep.getStringExtra("lastName");
-        String newEmailString = prevRegistrationStep.getStringExtra("email");
-        String newPasswordConfirmString = prevRegistrationStep.getStringExtra("password");
+        firstNameString = prevRegistrationStep.getStringExtra("firstName");
+        lastNameString = prevRegistrationStep.getStringExtra("lastName");
+        newEmailString = prevRegistrationStep.getStringExtra("email");
+        newPasswordConfirmString = prevRegistrationStep.getStringExtra("password");
 
-        Log.d("debug", "nric scanning");
-        cameraView = findViewById(R.id.cameraView);
-        initCamera();
+        scanStatus = findViewById(R.id.scanStatus);
+        finishRegistrationButton = findViewById(R.id.registerCompleteButton);
+        finishRegistrationButton.setVisibility(View.INVISIBLE);
 
-        /*mAuth.createUserWithEmailAndPassword(newEmailString, newPasswordConfirmString)
+        camera = findViewById(R.id.cameraView);
+        camera.setLifecycleOwner(this);
+        camera.addFrameProcessor(new FrameProcessor() {
+            @Override
+            @WorkerThread
+            public void process(@NonNull Frame frame) {
+                if (frame.getDataClass() == byte[].class) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    YuvImage yuvImage = new YuvImage(frame.getData(), ImageFormat.NV21, frame.getSize().getWidth(), frame.getSize().getHeight(), null);
+                    yuvImage.compressToJpeg(new Rect(0, 0, frame.getSize().getWidth(), frame.getSize().getHeight()), 90, out);
+                    byte[] imageBytes = out.toByteArray();
+                    String imageString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+
+                    OkHttpClient client = new OkHttpClient().newBuilder()
+                            .build();
+                    MediaType mediaType = MediaType.parse("application/json,text/plain");
+                    RequestBody body = RequestBody.create(mediaType, "{\r\n\t\"base64image\":\"" + imageString + "\"\r\n}");
+                    Request request = new Request.Builder()
+                            .url("https://niw1itg937.execute-api.ap-southeast-1.amazonaws.com/Prod/verify")
+                            .method("POST", body)
+                            .addHeader("x-api-key", "sWenMNn3MoFuUAW04AdG")
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Content-Type", "text/plain")
+                            .build();
+                    try {
+                        String resultString = client.newCall(request).execute().body().string();
+                        //Log.d("debug", resultString);
+                        checkFrame(resultString);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void checkFrame(String resultString) throws JSONException {
+        JSONObject jsonObject = new JSONObject(resultString);
+
+        JSONObject prediction = jsonObject.getJSONObject("prediction");
+        JSONObject vision = jsonObject.getJSONObject("vision");
+        JSONObject qualityCheck = jsonObject.getJSONObject("qualityCheck");
+
+        if (prediction.getString("type").equals("sg_id_front")) {
+            if (qualityCheck.getBoolean("finalDecision")) {
+                // Read NRIC number for now
+                nricString = vision.getJSONObject("extract").getString("idNum");
+
+                findViewById(R.id.nricScanner).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        camera.clearFrameProcessors();
+                        scanStatus.setText(R.string.nric_success);
+                        finishRegistrationButton.setVisibility(View.VISIBLE);
+                    }
+                });
+
+            } else {
+                findViewById(R.id.nricScanner).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scanStatus.setText(R.string.nric_unclear);
+                    }
+                });
+            }
+        } else { // Not the front
+            findViewById(R.id.nricScanner).post(new Runnable() {
+                @Override
+                public void run() {
+                    scanStatus.setText(R.string.nric_place_face_up);
+                }
+            });
+        }
+    }
+
+    private void onRegistrationCompletePress(View view) {
+
+
+        mAuth.createUserWithEmailAndPassword(newEmailString, newPasswordConfirmString)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -99,188 +177,7 @@ public class NRICActivity extends AppCompatActivity {
                             }
                         }
                     }
-                });*/
-    }
-
-    private void initCamera() {
-        CameraManager cameraManager = (CameraManager) this.getSystemService(Context.CAMERA_SERVICE);
-
-        try {
-            cameraId = cameraManager.getCameraIdList()[0];
-            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            //imageDimension = map.getOutputSizes(SurfaceView.class)[0];
-
-            // Check if camera permissions are allowed
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,new String[]{
-                        Manifest.permission.CAMERA//,
-                        //Manifest.permission.WRITE_EXTERNAL_STORAGE
-                }, REQUEST_CAMERA_PERMISSION);
-                return;
-            }
-            cameraManager.openCamera(cameraId, stateCallback, null);
-
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-
-        imageReader = ImageReader.newInstance(640, 380, ImageFormat.JPEG, 1);
-        imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader imageReader) {
-                Log.d("debug", "image got");
-
-                Image image = null;
-                try {
-                     image = imageReader.acquireLatestImage();
-                } catch (Exception e) {
-                    Log.d("debug", "no image");
-                }
-
-            }
-        }, mBackgroundHandler);
-    }
-
-    CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
-        @Override
-        public void onOpened(@NonNull CameraDevice camera) {
-            cameraDevice = camera;
-            createCameraPreview();
-        }
-
-        @Override
-        public void onDisconnected(@NonNull CameraDevice cameraDevice) {
-            cameraDevice.close();
-        }
-
-        @Override
-        public void onError(@NonNull CameraDevice cameraDevice, int i) {
-            cameraDevice.close();
-            cameraDevice = null;
-        }
-    };
-
-    private void createCameraPreview() {
-        try {
-            Surface surface = cameraView.getHolder().getSurface();
-
-            captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
-            //captureRequestBuilder.addTarget(imageReader.getSurface());
-            captureRequestBuilder.addTarget(surface);
-            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    if (cameraDevice == null) {
-                        return;
-                    }
-                    cameraCaptureSessions = cameraCaptureSession;
-                    updatePreview();
-                }
-
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Log.d("debug", "the bad thing happened");
-                }
-            }, null);
-
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updatePreview() {
-        if (cameraDevice == null) {
-            Log.d("debug", "error");
-        }
-
-        captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
-        try {
-            cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), new CameraCaptureSession.CaptureCallback() {
-                @Override
-                public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
-                    super.onCaptureCompleted(session, request, result);
-                    captureStillPicture();
-                }
-            }, mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void captureStillPicture() {
-        try {
-            if (cameraDevice == null) {
-                return;
-            }
-            int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            captureBuilder.addTarget(imageReader.getSurface());
-            //captureBuilder.set(CaptureRequest.FLASH_MODE, torchStatus);
-            //captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
-            captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
-            captureBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
-            //captureBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, range);
-            CameraCaptureSession.CaptureCallback captureStillCallback = new CameraCaptureSession.CaptureCallback() {
-                @Override
-                public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
-                }
-
-                @Override
-                public void onCaptureStarted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, long timestamp, long frameNumber) {
-                    super.onCaptureStarted(session, request, timestamp, frameNumber);
-                }
-            };
-            cameraCaptureSessions.capture(captureBuilder.build(), captureStillCallback, null);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "You can't use camera without permission", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startBackgroundThread();
-        initCamera();
-        //if(textureView.isAvailable())
-        //    openCamera();
-        //else
-        //    textureView.setSurfaceTextureListener(textureListener);
-    }
-
-    @Override
-    protected void onPause() {
-        stopBackgroundThread();
-        super.onPause();
-    }
-
-    private void stopBackgroundThread() {
-        mBackgroundThread.quitSafely();
-        try {
-            mBackgroundThread.join();
-            mBackgroundThread = null;
-            mBackgroundHandler = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void startBackgroundThread() {
-        mBackgroundThread = new HandlerThread("Camera Background");
-        mBackgroundThread.start();
-        mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+                });
     }
 
     private void completeRegistration(FirebaseUser currentUser) {

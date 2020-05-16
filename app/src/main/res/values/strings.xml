@@ -26,4 +26,9 @@
     <string name="title_notifications">Notifications</string>
 
     <string name="title_details">Details</string>
+
+    <string name="nric_scan_start">Please begin the scan by placing the front of your NRIC in the center of the screen.</string>
+    <string name="nric_place_face_up">Please ensure that the card is centered and is face-up</string>
+    <string name="nric_unclear">Please ensure the card is in focus.</string>
+    <string name="nric_success">NRIC successfully read! Please proceed with registration.</string>
 </resources>
