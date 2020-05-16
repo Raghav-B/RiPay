@@ -1,5 +1,6 @@
 package com.example.ripay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -61,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_successful,
                                     Snackbar.LENGTH_LONG).show();
-                            // TODO ADD SIGNIN ACTIVITY
+                            completeRegistration(user);
                         } else {
                             try {
                                 throw task.getException();
@@ -84,6 +85,13 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void completeRegistration(FirebaseUser currentUser) {
+        Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);
+        completeLoginIntent.putExtra("uid", currentUser.getUid());
+        startActivity(completeLoginIntent);
+        finish();
     }
 
 }

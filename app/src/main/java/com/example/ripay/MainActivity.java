@@ -27,6 +27,25 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private int loginView;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        loginView = R.layout.activity_main;
+        setContentView(loginView);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) { // If user has previously signed in.
+            Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
+                    Snackbar.LENGTH_LONG).show();
+            Log.d("debug", "User name: " + currentUser.getEmail());
+            mAuth.signOut(); // TODO REMOVE IN FINAL BUILD
+            // TODO Add login function here
+        }
+    }
+
     public void onLoginButtonPress(View view) {
         EditText emailText = findViewById(R.id.edtLoginEmail);
         EditText passwordText = findViewById(R.id.edtLoginPassword);
@@ -51,7 +70,7 @@ public class MainActivity extends AppCompatActivity
                                 Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
                                         Snackbar.LENGTH_LONG).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                // TODO ADD SIGNIN ACTIVITY
+                                completeLogin(user);
                             } else {
                                 try {
                                     throw task.getException();
@@ -75,27 +94,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void completeLogin(FirebaseUser currentUser) {
+        Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);
+        Log.d("debug", "uid pre login: " + currentUser.getUid());
+        completeLoginIntent.putExtra("uid", currentUser.getUid());
+        startActivity(completeLoginIntent);
+        finish();
+    }
+
     public void onRegisterButtonPress(View view) {
         Intent registerIntent = new Intent(this, RegisterActivity.class);
         startActivity(registerIntent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        loginView = R.layout.activity_main;
-        setContentView(loginView);
-
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        if (currentUser != null) { // If user has previously signed in.
-            Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
-                    Snackbar.LENGTH_LONG).show();
-            Log.d("debug", "User name: " + currentUser.getEmail());
-            mAuth.signOut(); // TODO REMOVE IN FINAL BUILD
-        }
     }
 
     @Override
