@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 
 public class BusinessCardAdapter extends ArrayAdapter<Business> {
     private Context mContext;
-    private List<Business> businessList = new ArrayList<>();
+    private List<Business> businessList;
 
     public BusinessCardAdapter(@NonNull Context context, @LayoutRes ArrayList<Business> list) {
         super(context, 0, list);
@@ -36,13 +36,13 @@ public class BusinessCardAdapter extends ArrayAdapter<Business> {
 
         Business curBusiness = businessList.get(position);
 
-        ImageView image = (ImageView)listItem.findViewById(R.id.image);
+        ImageView image = listItem.findViewById(R.id.image);
         image.setImageResource(curBusiness.getImageSrc());
 
-        TextView name = (TextView) listItem.findViewById(R.id.businessName);
+        TextView name = listItem.findViewById(R.id.businessName);
         name.setText(curBusiness.toString());
 
-        ProgressBar progressBar = (ProgressBar) listItem.findViewById(R.id.fundProgressBar);
+        ProgressBar progressBar = listItem.findViewById(R.id.fundProgressBar);
         progressBar.setProgress(curBusiness.getProg());
 
         return listItem;
