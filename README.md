@@ -1,4 +1,3 @@
-# razer_hackathon_milobois
 # RiPay
 
 ***A digital solution for crowd-lending catered to the youth and small enterprises of Singapore***
