@@ -1,20 +1,24 @@
 package com.example.ripay;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
+
+import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private int loginView;
+    private Context curContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +38,24 @@ public class MainActivity extends AppCompatActivity
 
         loginView = R.layout.activity_main;
         setContentView(loginView);
+        curContext = this;
+
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish_activity")) {
+                    finish();
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_activity"));
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) { // If user has previously signed in.
-            Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
-                    Snackbar.LENGTH_LONG).show();
+            FocusSnackbar.show(curContext, R.string.user_login_success, findViewById(R.id.loginScreen));
             Log.d("debug", "User name: " + currentUser.getEmail());
             mAuth.signOut(); // TODO REMOVE IN FINAL BUILD
             // TODO Add login function here
@@ -54,8 +70,7 @@ public class MainActivity extends AppCompatActivity
         String password = passwordText.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Snackbar.make(findViewById(R.id.loginScreen), R.string.login_details_not_entered,
-                    Snackbar.LENGTH_LONG).show();
+            FocusSnackbar.show(curContext, R.string.login_details_not_entered, findViewById(R.id.loginScreen));
             return;
         }
 
@@ -67,8 +82,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_success,
-                                        Snackbar.LENGTH_LONG).show();
+                                FocusSnackbar.show(curContext, R.string.user_login_success, findViewById(R.id.loginScreen));
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 completeLogin(user);
                             } else {
@@ -76,12 +90,10 @@ public class MainActivity extends AppCompatActivity
                                     throw task.getException();
                                 } catch (FirebaseAuthInvalidUserException e) {
                                     // User does not exist
-                                    Snackbar.make(findViewById(R.id.loginScreen), R.string.user_not_found_error,
-                                            Snackbar.LENGTH_LONG).show();
+                                    FocusSnackbar.show(curContext, R.string.user_not_found_error, findViewById(R.id.loginScreen));
                                 } catch (FirebaseAuthInvalidCredentialsException e) {
                                     // Incorrect credentials
-                                    Snackbar.make(findViewById(R.id.loginScreen), R.string.user_login_password_fail,
-                                            Snackbar.LENGTH_LONG).show();
+                                    FocusSnackbar.show(curContext, R.string.user_login_password_fail, findViewById(R.id.loginScreen));
                                 } catch (Exception e) {
                                     Log.d("exception", e.getMessage());
                                 }

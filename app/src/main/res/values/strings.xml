@@ -18,8 +18,11 @@
     <string name="registration_invalid_email">Please enter a valid email</string>
     <string name="registration_email_exists">This account already exists, please login</string>
     <string name="registration_successful">Your account has been successfully created!</string>
+
     <string name="title_activity_primary">PrimaryActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="title_details">Details</string>
 </resources>

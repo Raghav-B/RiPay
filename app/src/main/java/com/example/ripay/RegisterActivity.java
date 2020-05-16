@@ -1,12 +1,13 @@
 package com.example.ripay;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -23,11 +24,14 @@ import com.google.firebase.auth.FirebaseUser;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private Context curContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        curContext = this;
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut(); // Signing out just in case.
@@ -44,13 +48,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (newEmailString.isEmpty() || newPasswordString.isEmpty() ||
                 newPasswordConfirmString.isEmpty()) {
-            Snackbar.make(findViewById(R.id.registrationScreen), R.string.login_details_not_entered,
-                    Snackbar.LENGTH_LONG).show();
+            FocusSnackbar.show(curContext, R.string.login_details_not_entered, findViewById(R.id.registrationScreen));
             return;
         }
         if (!newPasswordString.equals(newPasswordConfirmString)) {
-            Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_password_diff,
-                    Snackbar.LENGTH_LONG).show();
+            FocusSnackbar.show(curContext, R.string.registration_password_diff, findViewById(R.id.registrationScreen));
             return;
         }
 
@@ -60,24 +62,20 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_successful,
-                                    Snackbar.LENGTH_LONG).show();
+                            FocusSnackbar.show(curContext, R.string.registration_successful, findViewById(R.id.registrationScreen));
                             completeRegistration(user);
                         } else {
                             try {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
                                 // Weak password
-                                Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_weak_password,
-                                        Snackbar.LENGTH_LONG).show();
+                                FocusSnackbar.show(curContext, R.string.registration_weak_password, findViewById(R.id.registrationScreen));
                             } catch (FirebaseAuthInvalidCredentialsException e) {
                                 // Wrong email
-                                Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_invalid_email,
-                                        Snackbar.LENGTH_LONG).show();
+                                FocusSnackbar.show(curContext, R.string.registration_invalid_email, findViewById(R.id.registrationScreen));
                             } catch (FirebaseAuthUserCollisionException e) {
                                 // Email already registered
-                                Snackbar.make(findViewById(R.id.registrationScreen), R.string.registration_email_exists,
-                                        Snackbar.LENGTH_LONG).show();
+                                FocusSnackbar.show(curContext, R.string.registration_email_exists, findViewById(R.id.registrationScreen));
                             } catch (Exception e) {
                                 // Unknown exception
                                 Log.d("exception", e.getMessage());
@@ -90,8 +88,11 @@ public class RegisterActivity extends AppCompatActivity {
     public void completeRegistration(FirebaseUser currentUser) {
         Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);
         completeLoginIntent.putExtra("uid", currentUser.getUid());
+
+        Intent finishLoginActivityIntent = new Intent("finish_activity");
+        sendBroadcast(finishLoginActivityIntent);
+
         startActivity(completeLoginIntent);
         finish();
     }
-
 }
