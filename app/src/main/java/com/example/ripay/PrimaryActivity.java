@@ -24,22 +24,21 @@ public class PrimaryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_primary);
-        mpb = (ProgressBar) findViewById(R.id.pb);
 
         User x = new User("Vibhu", 1000);
         this.user = x;
 
         al = new ArrayList<>();
         Business u1 = new Business("Jay Gould", 1000, 0,
-                30, 100, 500);
+                30, 100, 500, R.drawable.common_google_signin_btn_icon_dark);
         Business u2 =  new Business("John Depp", 1000, 500,
-                30, 100, 500);
+                30, 100, 500, R.drawable.common_google_signin_btn_icon_dark_normal);
         Business u3 =  new Business("Tom Jackson", 1000, 750,
-                30, 100, 500);
+                30, 100, 500, R.drawable.common_full_open_on_phone);
         Business u4 =  new Business("Jon Stevenson", 1000, 300,
-                30, 100, 500);
+                30, 100, 500, R.drawable.common_google_signin_btn_icon_light_focused);
         Business u5 =  new Business("George Lucas", 1000, 0,
-                30, 100, 500);
+                30, 100, 500, R.drawable.common_google_signin_btn_icon_light_normal_background);
 
         al.add(u1);
         al.add(u2);
@@ -47,7 +46,7 @@ public class PrimaryActivity extends AppCompatActivity {
         al.add(u4);
         al.add(u5);
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.business_card, R.id.name, al);
+        arrayAdapter = new BusinessCardAdapter(this, al);
 
         SwipeFlingAdapterView flingContainer = findViewById(R.id.swipeFrame);
 
@@ -67,19 +66,20 @@ public class PrimaryActivity extends AppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 //Toast.makeText(MainActivity.this, "left", Toast.LENGTH_SHORT).show(); //Some kind of display
-                Business u = (Business) dataObject;
+                //Business u = (Business) dataObject;
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 //Toast.makeText(MainActivity.this, "right", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
                 al.add(new Business("Done", 1000, 0,
-                        30, 100, 500));
+                        30, 100, 500, R.drawable.ic_menu_send));
                 arrayAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
                 i++;
@@ -99,7 +99,7 @@ public class PrimaryActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "click", Toast.LENGTH_LONG).show();
                 //oast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_LONG).show();
                 Business u = (Business) dataObject;
-                if(u.getCompanyname() != "Done") {
+                if(u.getCompanyName() != "Done") {
                     openActivity2((Business) dataObject);
                 }
             }
@@ -109,16 +109,20 @@ public class PrimaryActivity extends AppCompatActivity {
     public void openActivity2(Business business) {
         Intent intent = new Intent(this, Details.class);
         intent.putExtra("id", business.getID());
-        intent.putExtra("name", business.getCompanyname());
-        intent.putExtra("cur", business.getcur());
-        intent.putExtra("tot", business.gettot());
-        intent.putExtra("bro", business.getBronzeval());
-        intent.putExtra("sil", business.getSilverval());
-        intent.putExtra("gold", business.getGoldval());
+        intent.putExtra("name", business.getCompanyName());
+        intent.putExtra("cur", business.getCurVal());
+        intent.putExtra("tot", business.getTotalVal());
+        intent.putExtra("bro", business.getBronzeVal());
+        intent.putExtra("sil", business.getSilverVal());
+        intent.putExtra("gold", business.getGoldVal());
         intent.putExtra("invname", user.getName());
         intent.putExtra("invbal", user.getBalance());
 
         startActivity(intent);
+    }
+
+    public void updateCard(Business business) {
+
     }
 
 }
