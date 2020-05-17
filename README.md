@@ -41,7 +41,7 @@ If you want to learn more, tap the card to explore more information about the bu
 
 <insert image of bio>
   
-![img4](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/profile.png)
+![img4](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/bio.png)
 
 
 #### For Enterprises
