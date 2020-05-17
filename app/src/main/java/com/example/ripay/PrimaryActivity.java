@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
@@ -23,20 +24,20 @@ public class PrimaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_primary);
 
-        User x = new User("Vibhu", 1000);
-        this.user = x;
+        Intent prevIntent = getIntent();
+        user = new User(prevIntent.getStringExtra("uid"));
 
         al = new ArrayList<>();
-        Business u1 = new Business("Jay Gould", 1000, 0,
-                30, 100, 500, R.drawable.common_google_signin_btn_icon_dark);
-        Business u2 =  new Business("John Depp", 1000, 500,
-                30, 100, 500, R.drawable.common_google_signin_btn_icon_dark_normal);
-        Business u3 =  new Business("Tom Jackson", 1000, 750,
-                30, 100, 500, R.drawable.common_full_open_on_phone);
-        Business u4 =  new Business("Jon Stevenson", 1000, 300,
-                30, 100, 500, R.drawable.common_google_signin_btn_icon_light_focused);
-        Business u5 =  new Business("George Lucas", 1000, 0,
-                30, 100, 500, R.drawable.common_google_signin_btn_icon_light_normal_background);
+        Business u1 = new Business("Barberrer", 1000, 0,
+                30, 100, 500, R.drawable.barberrer);
+        Business u2 =  new Business("Barby", 1000, 500,
+                30, 100, 500, R.drawable.barby);
+        Business u3 =  new Business("Caffee", 1000, 750,
+                30, 100, 500, R.drawable.cafee);
+        Business u4 =  new Business("Laundrix", 1000, 300,
+                30, 100, 500, R.drawable.laundrix);
+        Business u5 =  new Business("Primart", 1000, 0,
+                30, 100, 500, R.drawable.primart);
 
         al.add(u1);
         al.add(u2);
@@ -113,9 +114,15 @@ public class PrimaryActivity extends AppCompatActivity {
         intent.putExtra("bro", business.getBronzeVal());
         intent.putExtra("sil", business.getSilverVal());
         intent.putExtra("gold", business.getGoldVal());
-        intent.putExtra("invname", user.getName());
-        intent.putExtra("invbal", user.getBalance());
+        intent.putExtra("invname", user.getUserName());
 
+        startActivity(intent);
+    }
+
+    public void onProfileButtonPress(View view) {
+        Intent intent = new Intent(this, Profile.class);
+        intent.putExtra("userName", user.getUserName());
+        intent.putExtra("account_id", user.getAccount_id());
         startActivity(intent);
     }
 

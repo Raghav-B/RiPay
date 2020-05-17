@@ -1,6 +1,7 @@
 package com.example.ripay;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Details extends AppCompatActivity {
 
+    static int val = 0;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -21,28 +23,14 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.business_card_details);
         Intent intent = getIntent();
 
-        Button button = (Button) findViewById(R.id.sendMoneyButton);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //SEND TO THE TRANSACTION ACTIVITY
-            }
-        });
-
-        //SEEKBAR
-
         SeekBar sb = (SeekBar) findViewById(R.id.seekbar);
         //int value = sb.getProgress();
         TextView num = (TextView) findViewById(R.id.edt);
         num.setText("-");
 
-
-
-
-        String invname = intent.getStringExtra("invname");
+        //String invname = intent.getStringExtra("invname");
         double invbal = intent.getDoubleExtra("invbal", 0);
-        int bal = (int) invbal;
+        int bal = 100;
 
         sb.setMax(bal);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -62,9 +50,16 @@ public class Details extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView num = (TextView) findViewById(R.id.edt);
                 num.setText(value + "/" + seekBar.getMax() + " Credits Available");
+                val = value;
             }
+        });
 
-
+        Button button = (Button) findViewById(R.id.sendMoneyButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sendPayment(String userid, "ISBC756", val); //Add User and Biz details...
+            }
         });
 
         //Text
@@ -86,8 +81,19 @@ public class Details extends AppCompatActivity {
                 " %.2f credits, the Silver Tier requires %.2f credits and the Gold Tier requires %.2f" +
                 " credits. Help support %s today!", name, tot, curr, rem, bro, sil, gold, name );
 
-            desc.setText(String.valueOf(str));
-        }
+        desc.setText(String.valueOf(str));
+
+
+    }
+
+    public void sendPayment(String userid, String bizid, int value) {
+        Intent payment = new Intent(this, TransferComplete.class);
+        payment.putExtra("userid", userid);
+        payment.putExtra("bizid", bizid);
+        payment.putExtra("value", value);
+        startActivity(payment);
+        finish();
+    }
 
 
 }

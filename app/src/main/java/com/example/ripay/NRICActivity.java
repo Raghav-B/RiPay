@@ -21,6 +21,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -43,6 +44,9 @@ public class NRICActivity extends AppCompatActivity {
     private String userNameString;
     private String nricString;
 
+    private EditText edtFullName;
+    private EditText edtNRIC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +66,13 @@ public class NRICActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, new IntentFilter("finish_registration"));
 
         scanStatus = findViewById(R.id.scanStatus);
+        edtFullName = findViewById(R.id.edtFullName);
+        edtNRIC = findViewById(R.id.edtNRIC);
         continueRegistrationButton = findViewById(R.id.registerContinueButton);
+
         continueRegistrationButton.setVisibility(View.INVISIBLE);
+        edtFullName.setVisibility(View.GONE);
+        edtNRIC.setVisibility(View.GONE);
 
         camera = findViewById(R.id.cameraView);
         camera.setLifecycleOwner(this);
@@ -91,8 +100,8 @@ public class NRICActivity extends AppCompatActivity {
                             .build();
                     try {
                         String resultString = client.newCall(request).execute().body().string();
+                        Log.d("debug", resultString);
                         checkFrame(resultString);
-
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
@@ -104,9 +113,27 @@ public class NRICActivity extends AppCompatActivity {
     private void checkFrame(String resultString) throws JSONException {
         JSONObject jsonObject = new JSONObject(resultString);
 
-        JSONObject prediction = jsonObject.getJSONObject("prediction");
-        JSONObject vision = jsonObject.getJSONObject("vision");
-        JSONObject qualityCheck = jsonObject.getJSONObject("qualityCheck");
+        JSONObject prediction;
+        JSONObject vision;
+        JSONObject qualityCheck;
+
+        try {
+            prediction = jsonObject.getJSONObject("prediction");
+            vision = jsonObject.getJSONObject("vision");
+            qualityCheck = jsonObject.getJSONObject("qualityCheck");
+        } catch (JSONException e) {
+            findViewById(R.id.nricScanner).post(new Runnable() {
+                @Override
+                public void run() {
+                    camera.clearFrameProcessors();
+                    scanStatus.setText("API Limit Exceeded, please enter your details manually.");
+                    edtFullName.setVisibility(View.VISIBLE);
+                    edtNRIC.setVisibility(View.VISIBLE);
+                    continueRegistrationButton.setVisibility(View.VISIBLE);
+                }
+            });
+            return;
+        }
 
         if (prediction.getString("type").equals("sg_id_front")) {
             if (qualityCheck.getBoolean("finalDecision")) {
@@ -146,6 +173,9 @@ public class NRICActivity extends AppCompatActivity {
     }
 
     public void onRegistrationContinuePress(View view) {
+        userNameString = edtFullName.getText().toString();
+        nricString = edtNRIC.getText().toString();
+
         Intent continueRegistrationIntent = new Intent(this, RegisterActivity.class);
         continueRegistrationIntent.putExtra("userName", userNameString);
         continueRegistrationIntent.putExtra("NRIC", nricString);

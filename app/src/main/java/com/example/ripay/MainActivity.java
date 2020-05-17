@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) { // If user has previously signed in.
-            FocusSnackbar.show(curContext, R.string.user_login_success, findViewById(R.id.loginScreen));
+            //FocusSnackbar.show(curContext, R.string.user_login_success, findViewById(R.id.loginScreen));
             Log.d("debug", "User name: " + currentUser.getEmail());
             mAuth.signOut(); // TODO REMOVE IN FINAL BUILD
             // TODO Add login function here

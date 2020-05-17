@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.jakewharton:butterknife:7.0.1'
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
     implementation 'com.lorentzos.swipecards:library:1.0.9'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0'
+    implementation 'androidx.navigation:navigation-ui:2.0.0'
     annotationProcessor 'com.jakewharton:butterknife:7.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
@@ -55,4 +57,3 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
-

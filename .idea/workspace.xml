@@ -32,15 +32,21 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_2_0_1_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/Details.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/Details.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/NRICActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/NRICActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/RegisterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/RegisterActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/PrimaryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/PrimaryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ripay/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_n_r_i_c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_n_r_i_c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_primary.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_primary.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/business_card.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/business_card.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/swiper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/swiper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,25 +85,30 @@
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="D:/AndroidSDK" />
     <property name="device.picker.selection" value="Pixel_2_API_25" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RiPay-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../New folder/RiPay" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\software_dev\RiPay\app\src\main\res\mipmap-xxhdpi" />
-      <recent name="D:\software_dev\RiPay\app\src\main\res\drawable" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\software_dev\RiPay\app\src\main\res\layout" />
     </key>
     <key name="android.template.packageName">
       <recent name="com.example.ripay" />
     </key>
-    <key name="android.template.parentActivityClass">
-      <recent name="" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\software_dev\RiPay\app\src\main\res\drawable" />
+      <recent name="D:\software_dev\RiPay\app\src\main\res\mipmap-anydpi-v26" />
+      <recent name="D:\software_dev\RiPay\app\src\main\res\layout" />
+      <recent name="D:\software_dev\RiPay\app\src\main\res\mipmap-xxhdpi" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.ripay" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.ripay" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\software_dev\RiPay\app\src\main\res\layout" />
+    <key name="android.template.parentActivityClass">
+      <recent name="" />
     </key>
   </component>
   <component name="RunDashboard">
