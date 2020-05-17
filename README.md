@@ -22,17 +22,30 @@ To achieve our goal to connect users and businesses, we have developed the RiPay
 
 <insert image of title screen here>
 
+
+
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/title%20screen.png" width="200">
+
 With a simple and easy process to sign up and verify your information, you will be setup in our friendly and easy to use ecosystem.
 
-- <insert image of login screen and KYC here>
-
+<insert image of login screen and KYC here>
+  
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png" width="200">
+  
+  
 With that, supporting your local business with low interest loans is but a moment away. Swipe right to express interest in supporting a business you love, or left to find more options.
 
 <insert image of swiping>
 
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/swiping.png" width="200">
+
+
 If you want to learn more, tap the card to explore more information about the businesses you cherish.
 
 <insert image of bio>
+  
+
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/bio.png" width="200">
 
 #### For Enterprises
 
@@ -43,6 +56,18 @@ Businesses looking for capital can create a profile on the app.
 They can then create a goal amount, as well as provide information justifying the loans and potential rewards for lenders.
 
 <insert bio create here>
+  
+### Areas For Improvement
+Limitations of the Hackathon mean that we weren't able to fully implement all our ideas. The first area of the app that should be implemented if given more time is the enterprise side of RiPay, where businesses can sign up for loans and check their funds. This area of the app will allow businesses to do the following:
+1. Create a profile
+2. Create a Microcredit Loan
+3. Establish rewards and discount at the business' discretion to reward loyal customers
+
+The second area of improvement is in the social aspect of this app. We wished to establish RiPay as a tool for communities that look out for one another, and a good feature in such an app would be leaderboards, spotlights on neighbourhood businesses and promotions for investors. 
+
+Communities should be able to support their businesses and in-turn, businesses should be able to service the community, thus, our swipe-style app creates an online presence for apps. An improvement would be a map tool for users to see their favourite businesses in their own neighbourhoods and close to them so that the experience of connecting with their community is amplified.
+
+Another area of improvement is in the security of the app. We would have liked to implement 2FA as well as the e-KYC process (which is implemented but buggy) better, so that users' security is always ensured. Furthermore, we see value in creating a global communities through the implementation of the Visa API. 
 
 ### Looking Forward
 
@@ -52,6 +77,7 @@ We are very excited about the strides we have made with our app, but given the l
 - Razer Gold integration
 - Offering loyalty rewards
 - A referral system to increase adoption
+
 
 ### Who are we?
 
@@ -64,3 +90,17 @@ Our team includes
 - Ojus Sharma
 - Apoorva Ravi Balasubramanian
 
+### A Guide Through Our Classes
+1. Business: Class for business information
+2. BusinessCardAdapter: Helper Class for Business
+3. Constants: Helper methods 
+4. Deposit: The Activity where deposits are added to the current account of a user
+5. Details: The details of a chosen business from the Business activity
+6. FocusSnackBar: Custom SnackBar 
+7. MainActivity: Driver class and activity
+8. NRICActivity: KYC Activity to handle NRIC input upon registration
+9. PrimaryActivity: Swipe-form catalogue of Businesses
+10. Profile: Current User's Profile, displaying balance etc
+11. RegistrationActivity: The driver class for registration of new users
+12. TransferComplete: A confirmation page upon transfer
+13. User: Class for customer information
