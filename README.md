@@ -30,7 +30,8 @@ With a simple and easy process to sign up and verify your information, you will 
 
 <insert image of login screen and KYC here>
   
-![img2](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png = 100x20)
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png" width="200">
+  
   
 With that, supporting your local business with low interest loans is but a moment away. Swipe right to express interest in supporting a business you love, or left to find more options.
 
