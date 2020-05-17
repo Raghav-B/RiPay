@@ -22,13 +22,13 @@ To achieve our goal to connect users and businesses, we have developed the RiPay
 
 <insert image of title screen here>
 
-![img1](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/title%20screen.png)
+![img1](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/title%20screen.png =100x20)
 
 With a simple and easy process to sign up and verify your information, you will be setup in our friendly and easy to use ecosystem.
 
 <insert image of login screen and KYC here>
   
-![img2](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png)
+![img2](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png = 100x20)
   
 With that, supporting your local business with low interest loans is but a moment away. Swipe right to express interest in supporting a business you love, or left to find more options.
 
