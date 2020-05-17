@@ -1,36 +1,24 @@
 package com.example.ripay;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,12 +39,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                if (action.equals("finish_activity")) {
+                if (action.equals("finish_registration")) {
+                    unregisterReceiver(this);
                     finish();
                 }
             }
         };
-        registerReceiver(broadcastReceiver, new IntentFilter("finish_activity"));
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_registration"));
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -69,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*public void onLoginButtonPress(View view) {
+    public void onLoginButtonPress(View view) {
         EditText emailText = findViewById(R.id.edtLoginEmail);
         EditText passwordText = findViewById(R.id.edtLoginPassword);
 
@@ -111,29 +100,6 @@ public class MainActivity extends AppCompatActivity
         } else { // User is signed in (control shouldn't reach this part of code)
             Log.d("exception", "Unknown error");
         }
-    }*/
-
-    public void onLoginButtonPress(View view) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient().newBuilder()
-                        .build();
-                Request request = new Request.Builder()
-                        .url("https://razerhackathon.sandbox.mambu.com/api/branches/Team65")
-                        .method("GET", null)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Basic VGVhbTY1OnBhc3MxNDIxRjY4QUQ0")
-                        .addHeader("Cookie", "AWSALB=ZDieETaqZkNfobx51LqHamqg+pSmmxWDsfEtfF9Z8NPT9IYove1x7Nk3ebe+HuEFeX9qlZF/JdazcWZOYSm4NT40MH7+fm1YZF3+DaCC0k0p/lQgFGR0c4BBlkzT; AWSALBCORS=ZDieETaqZkNfobx51LqHamqg+pSmmxWDsfEtfF9Z8NPT9IYove1x7Nk3ebe+HuEFeX9qlZF/JdazcWZOYSm4NT40MH7+fm1YZF3+DaCC0k0p/lQgFGR0c4BBlkzT")
-                        .build();
-                try {
-                    String testString = client.newCall(request).execute().body().string();
-                    Log.d("debug", testString);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     public void completeLogin(FirebaseUser currentUser) {
@@ -145,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onRegisterButtonPress(View view) {
-        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        Intent registerIntent = new Intent(this, NRICActivity.class);
         startActivity(registerIntent);
     }
 

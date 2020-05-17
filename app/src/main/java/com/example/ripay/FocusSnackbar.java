@@ -13,4 +13,16 @@ public class FocusSnackbar {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
+
+    public static void showShort(Context context, int message, View view) {
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public static void showInfinite(Context context, int message, View view) {
+       InputMethodManager imm = (InputMethodManager)context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE).show();
+    }
 }

@@ -2,11 +2,9 @@ package com.example.ripay;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -16,9 +14,9 @@ public class PrimaryActivity extends AppCompatActivity {
 
     private ArrayList<Business> al;
     private ArrayAdapter<Business> arrayAdapter;
-    private int i;
-    private ProgressBar mpb;
     private User user;
+
+    private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
