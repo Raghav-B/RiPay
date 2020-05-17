@@ -90,3 +90,17 @@ Our team includes
 - Ojus Sharma
 - Apoorva Ravi Balasubramanian
 
+### A Guide Through Our Classes
+1. Business: Class for business information
+2. BusinessCardAdapter: Helper Class for Business
+3. Constants: Helper methods 
+4. Deposit: The Activity where deposits are added to the current account of a user
+5. Details: The details of a chosen business from the Business activity
+6. FocusSnackBar: Custom SnackBar 
+7. MainActivity: Driver class and activity
+8. NRICActivity: KYC Activity to handle NRIC input upon registration
+9. PrimaryActivity: Swipe-form catalogue of Businesses
+10. Profile: Current User's Profile, displaying balance etc
+11. RegistrationActivity: The driver class for registration of new users
+12. TransferComplete: A confirmation page upon transfer
+13. User: Class for customer information
