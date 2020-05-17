@@ -58,7 +58,7 @@ The second area of improvement is in the social aspect of this app. We wished to
 
 Communities should be able to support their businesses and in-turn, businesses should be able to service the community, thus, our swipe-style app creates an online presence for apps. An improvement would be a map tool for users to see their favourite businesses in their own neighbourhoods and close to them so that the experience of connecting with their community is amplified.
 
-Another area of improvement is in the security of the app. We would have liked to implement 2FA as well as the e-KYC process (which is implemented but buggy) better, so that users' security is always ensured. Furthermore, we see value in creating value for global communities through the implementation of the Visa API. 
+Another area of improvement is in the security of the app. We would have liked to implement 2FA as well as the e-KYC process (which is implemented but buggy) better, so that users' security is always ensured. Furthermore, we see value in creating a global communities through the implementation of the Visa API. 
 
 ### Looking Forward
 
