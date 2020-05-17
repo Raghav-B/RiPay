@@ -21,11 +21,13 @@ Enterprises can offer a rewards for these contributions through discounts or oth
 To achieve our goal to connect users and businesses, we have developed the RiPay app.
 
 <insert image of title screen here>
+![](r_hack_images/title screen.png)
 
 With a simple and easy process to sign up and verify your information, you will be setup in our friendly and easy to use ecosystem.
 
-- <insert image of login screen and KYC here>
-
+<insert image of login screen and KYC here>
+![](r_hack_images/login page.png)
+  
 With that, supporting your local business with low interest loans is but a moment away. Swipe right to express interest in supporting a business you love, or left to find more options.
 
 <insert image of swiping>
