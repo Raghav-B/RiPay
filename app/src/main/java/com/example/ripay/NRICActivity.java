@@ -8,9 +8,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
@@ -24,14 +26,6 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.frame.Frame;
 import com.otaliastudios.cameraview.frame.FrameProcessor;
@@ -41,16 +35,12 @@ import java.io.IOException;
 
 public class NRICActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
     private Context curContext;
     private CameraView camera;
     private TextView scanStatus;
-    private Button finishRegistrationButton;
+    private Button continueRegistrationButton;
 
-    private String firstNameString;
-    private String lastNameString;
-    private String newEmailString;
-    private String newPasswordConfirmString;
+    private String userNameString;
     private String nricString;
 
     @Override
@@ -59,18 +49,21 @@ public class NRICActivity extends AppCompatActivity {
         setContentView(R.layout.activity_n_r_i_c);
         curContext = this;
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
-
-        Intent prevRegistrationStep = getIntent();
-        firstNameString = prevRegistrationStep.getStringExtra("firstName");
-        lastNameString = prevRegistrationStep.getStringExtra("lastName");
-        newEmailString = prevRegistrationStep.getStringExtra("email");
-        newPasswordConfirmString = prevRegistrationStep.getStringExtra("password");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish_registration")) {
+                    unregisterReceiver(this);
+                    finish();
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_registration"));
 
         scanStatus = findViewById(R.id.scanStatus);
-        finishRegistrationButton = findViewById(R.id.registerCompleteButton);
-        finishRegistrationButton.setVisibility(View.INVISIBLE);
+        continueRegistrationButton = findViewById(R.id.registerContinueButton);
+        continueRegistrationButton.setVisibility(View.INVISIBLE);
 
         camera = findViewById(R.id.cameraView);
         camera.setLifecycleOwner(this);
@@ -98,7 +91,6 @@ public class NRICActivity extends AppCompatActivity {
                             .build();
                     try {
                         String resultString = client.newCall(request).execute().body().string();
-                        //Log.d("debug", resultString);
                         checkFrame(resultString);
 
                     } catch (IOException | JSONException e) {
@@ -120,13 +112,18 @@ public class NRICActivity extends AppCompatActivity {
             if (qualityCheck.getBoolean("finalDecision")) {
                 // Read NRIC number for now
                 nricString = vision.getJSONObject("extract").getString("idNum");
+                userNameString = vision.getJSONObject("extract").getString("name");
+
+                Log.d("debug", "Details: " + nricString + ", " + userNameString);
+
+                // TODO Add detected details focus snackbar
 
                 findViewById(R.id.nricScanner).post(new Runnable() {
                     @Override
                     public void run() {
                         camera.clearFrameProcessors();
                         scanStatus.setText(R.string.nric_success);
-                        finishRegistrationButton.setVisibility(View.VISIBLE);
+                        continueRegistrationButton.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -148,46 +145,10 @@ public class NRICActivity extends AppCompatActivity {
         }
     }
 
-    private void onRegistrationCompletePress(View view) {
-
-
-        mAuth.createUserWithEmailAndPassword(newEmailString, newPasswordConfirmString)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            FocusSnackbar.show(curContext, R.string.registration_successful, findViewById(R.id.registrationScreen));
-                            completeRegistration(user);
-                        } else {
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                // Weak password
-                                FocusSnackbar.show(curContext, R.string.registration_weak_password, findViewById(R.id.registrationScreen));
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                // Wrong email
-                                FocusSnackbar.show(curContext, R.string.registration_invalid_email, findViewById(R.id.registrationScreen));
-                            } catch (FirebaseAuthUserCollisionException e) {
-                                // Email already registered
-                                FocusSnackbar.show(curContext, R.string.registration_email_exists, findViewById(R.id.registrationScreen));
-                            } catch (Exception e) {
-                                // Unknown exception
-                                Log.d("exception", e.getMessage());
-                            }
-                        }
-                    }
-                });
-    }
-
-    private void completeRegistration(FirebaseUser currentUser) {
-        Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);
-        completeLoginIntent.putExtra("uid", currentUser.getUid());
-
-        Intent finishLoginActivityIntent = new Intent("finish_activity");
-        sendBroadcast(finishLoginActivityIntent);
-
-        startActivity(completeLoginIntent);
-        finish();
+    public void onRegistrationContinuePress(View view) {
+        Intent continueRegistrationIntent = new Intent(this, RegisterActivity.class);
+        continueRegistrationIntent.putExtra("userName", userNameString);
+        continueRegistrationIntent.putExtra("NRIC", nricString);
+        startActivity(continueRegistrationIntent);
     }
 }

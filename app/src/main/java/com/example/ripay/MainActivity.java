@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                if (action.equals("finish_activity")) {
+                if (action.equals("finish_registration")) {
                     unregisterReceiver(this);
                     finish();
                 }
             }
         };
-        registerReceiver(broadcastReceiver, new IntentFilter("finish_activity"));
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_registration"));
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -102,29 +102,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*public void onLoginButtonPress(View view) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient().newBuilder()
-                        .build();
-                Request request = new Request.Builder()
-                        .url("https://razerhackathon.sandbox.mambu.com/api/branches/Team65")
-                        .method("GET", null)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Basic VGVhbTY1OnBhc3MxNDIxRjY4QUQ0")
-                        .addHeader("Cookie", "AWSALB=ZDieETaqZkNfobx51LqHamqg+pSmmxWDsfEtfF9Z8NPT9IYove1x7Nk3ebe+HuEFeX9qlZF/JdazcWZOYSm4NT40MH7+fm1YZF3+DaCC0k0p/lQgFGR0c4BBlkzT; AWSALBCORS=ZDieETaqZkNfobx51LqHamqg+pSmmxWDsfEtfF9Z8NPT9IYove1x7Nk3ebe+HuEFeX9qlZF/JdazcWZOYSm4NT40MH7+fm1YZF3+DaCC0k0p/lQgFGR0c4BBlkzT")
-                        .build();
-                try {
-                    String testString = client.newCall(request).execute().body().string();
-                    Log.d("debug", testString);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }*/
-
     public void completeLogin(FirebaseUser currentUser) {
         Intent completeLoginIntent = new Intent(this, PrimaryActivity.class);
         Log.d("debug", "uid pre login: " + currentUser.getUid());
@@ -134,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onRegisterButtonPress(View view) {
-        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        Intent registerIntent = new Intent(this, NRICActivity.class);
         startActivity(registerIntent);
     }
 
