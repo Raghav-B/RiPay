@@ -28,15 +28,21 @@ With a simple and easy process to sign up and verify your information, you will 
 
 <insert image of login screen and KYC here>
   
-![img1](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png)
+![img2](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/login%20page.png)
   
 With that, supporting your local business with low interest loans is but a moment away. Swipe right to express interest in supporting a business you love, or left to find more options.
 
 <insert image of swiping>
+  
+![img3](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/swiping.png)
+  
 
 If you want to learn more, tap the card to explore more information about the businesses you cherish.
 
 <insert image of bio>
+  
+![img4](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/profile.png)
+
 
 #### For Enterprises
 
