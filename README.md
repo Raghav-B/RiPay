@@ -57,6 +57,7 @@ We are very excited about the strides we have made with our app, but given the l
 - Offering loyalty rewards
 - A referral system to increase adoption
 
+
 ### Who are we?
 
 We are a group of friends who decided to participate in the 2020 Razer FinTech Hackathon.
