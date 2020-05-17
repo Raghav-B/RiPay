@@ -22,7 +22,9 @@ To achieve our goal to connect users and businesses, we have developed the RiPay
 
 <insert image of title screen here>
 
-![img1](https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/title%20screen.png =100x20)
+
+
+<img src="https://github.com/Raghav-B/RiPay/blob/master/r_hack_images/title%20screen.png" width="200">
 
 With a simple and easy process to sign up and verify your information, you will be setup in our friendly and easy to use ecosystem.
 
